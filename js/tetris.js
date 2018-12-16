@@ -25,6 +25,20 @@ function createMatriz(width, height){
     return matriz;
 }
 
+function collide(grid, player) {
+    const matriz = player.matriz;
+    const offset = player.pos;
+
+    for(let y=0; y<matriz.length; ++y){
+        for(let x=0 ; x<matriz[y].length; ++x) {
+            if(matriz[y][x]!==0 && (grid[y + offset.y] && grid[y+ offset.y][x + offset.x])!==0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function drawMatriz(matriz, offset) {
     matriz.forEach((row, y) => {
         row.forEach((value, x)=>{
@@ -61,16 +75,26 @@ function update (time = 0){
   
 function playerDrop() {
     player.pos.y++;
+    if (collide (grid, player)) {
+        player.pos.y--;
+    }
         dropCounter=0;
+}
+
+function playerMove(direction) {
+    player.pos.x += direction;
+    if (collide(grid, player)) {
+        player.pos.x -= direction;
+    }
 }
 
 document.addEventListener("keydown", event =>{
     if (event.keyCode===40) {
         playerDrop();
     }else if (event.keyCode===37) {
-        player.pos.x--;
+        playerMove(-1);
     } else if(event.keyCode===39) {
-        player.pos.x++;
+        playerMove(1);
     }
 });
     update();
