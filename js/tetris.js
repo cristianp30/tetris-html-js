@@ -102,6 +102,20 @@ function playerMove(direction) {
     }
 }
 
+function playerRotate() {
+    const pos = player.pos.x;
+    rotate(player.matriz);
+}
+
+function rotate(matriz) {
+    for(let y=0; y<matriz.length; ++y) {
+        for(let x=0; x<y; ++x) {
+            [matriz[x][y], matriz[y][x]] = [matriz[y][x], matriz[x][y]];
+        }
+    }
+    matriz.forEach(row => row.reverse());
+}
+
 function playerReset() {
     player.pos.x = 0;
     player.pos.y = 0;
@@ -114,6 +128,8 @@ document.addEventListener("keydown", event =>{
         playerMove(-1);
     } else if(event.keyCode===39) {
         playerMove(1);
+    } else if (event.keyCode===32) {
+        playerRotate();
     }
 });
     update();
