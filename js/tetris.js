@@ -39,6 +39,17 @@ function collide(grid, player) {
     return false;
 }
 
+
+function merge(grid, player) {
+    player.matriz.forEach((row, y) => {
+        row.forEach((value,x)=> {
+            if(value!==0){
+                grid[y + player.pos.y][x + player.pos.x] = value;
+            }
+        });
+    });
+}
+
 function drawMatriz(matriz, offset) {
     matriz.forEach((row, y) => {
         row.forEach((value, x)=>{
@@ -77,6 +88,8 @@ function playerDrop() {
     player.pos.y++;
     if (collide (grid, player)) {
         player.pos.y--;
+        merge(grid, player);
+        playerReset();
     }
         dropCounter=0;
 }
@@ -85,7 +98,13 @@ function playerMove(direction) {
     player.pos.x += direction;
     if (collide(grid, player)) {
         player.pos.x -= direction;
+        
     }
+}
+
+function playerReset() {
+    player.pos.x = 0;
+    player.pos.y = 0;
 }
 
 document.addEventListener("keydown", event =>{
