@@ -1,5 +1,6 @@
 let lastTime = 0;
-
+let dropInterval =1000;
+let dropCounter = 0;
 
 const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
@@ -27,11 +28,11 @@ function createMatriz(width, height){
 function drawMatriz(matriz, offset) {
     matriz.forEach((row, y) => {
         row.forEach((value, x)=>{
-            if(value!==0){
+            if(value!==0) {
                 context.fillStyle = "red";
-                context.fiilRect(x + offset.x; y + offset.y, 1,1);
+                context.fillRect(x + offset.x, y + offset.y, 1, 1);
             }
-        })
+        });
         
     });
     
@@ -41,14 +42,35 @@ function draw(){
     context.fillStyle = "#000";
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawMatriz(grid, {x:0, y:0});
+    drawMatriz(player.matriz, player.pos);
 }
 
 function update (time = 0){
     const deltaTime = time - lastTime;
     
     lastTime = time;
+    dropCounter += deltaTime;
+    if (dropCounter > dropInterval ) {
+        playerDrop();
+    }
+
+
     draw();
     requestAnimationFrame(update);
 }
   
+function playerDrop() {
+    player.pos.y++;
+        dropCounter=0;
+}
+
+document.addEventListener("keydown", event =>{
+    if (event.keyCode===40) {
+        playerDrop();
+    }else if (event.keyCode===37) {
+        player.pos.x--;
+    } else if(event.keyCode===39) {
+        player.pos.x++;
+    }
+});
     update();
