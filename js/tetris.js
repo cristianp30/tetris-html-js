@@ -7,13 +7,56 @@ const context = canvas.getContext("2d");
 const grid = createMatriz(10,20);
 const player = {
     pos: {x: 0, y: 0},
-    matriz: [
-        [0,0,0],
-        [1,1,1],
-        [0,1,0]
-    ]
+    matriz: null
 };
 context.scale(20,20);
+
+function createPiece(tipo) {
+    if(tipo==='T'){
+        return[
+            [0,0,0],
+            [1,1,1],
+            [0,1,0]
+        ];
+    }else if(tipo==='L'){
+        return[
+            [0,1,0],
+            [0,1,0],
+            [0,1,1]
+        ];
+    } else if(tipo==='J'){
+        return[
+            [0,1,0],
+            [0,1,0],
+            [1,1,0]
+        ];
+    }else if(tipo==='S'){
+        return[
+            [0,1,1],
+            [1,1,0],
+            [0,0,0]
+        ];
+    }else if(tipo==='Z'){
+        return[
+            [1,1,0],
+            [0,1,1],
+            [0,0,0]
+        ];
+    }else if(tipo==='O'){
+        return[
+            [1,1],
+            [1,1]
+            
+        ];
+    }else if(tipo==='I'){
+        return[
+            [0,1,0],
+            [0,1,0],
+            [0,1,0],
+            [0,1,0]
+        ];
+    }
+}
 
 function createMatriz(width, height){
     const matriz = [];
@@ -104,7 +147,17 @@ function playerMove(direction) {
 
 function playerRotate() {
     const pos = player.pos.x;
+    let offset = 1;
     rotate(player.matriz);
+    while (collide(grid,player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset>0 ? 1: -1)) ;
+        if (offset>player.matriz[0].length) {
+            rotate(player.matriz);
+            player.pos.x = pos;
+            return;
+        }
+    }
 }
 
 function rotate(matriz) {
@@ -117,7 +170,9 @@ function rotate(matriz) {
 }
 
 function playerReset() {
-    player.pos.x = 0;
+    const pieces = 'IJLZSTO'
+    player.matriz = createPiece(pieces[pieces.length * Math.random() | 0]);
+    player.pos.x = (grid[0].length/2 | 0) - (player.matriz[0].length/2 | 0);
     player.pos.y = 0;
 }
 
@@ -132,4 +187,6 @@ document.addEventListener("keydown", event =>{
         playerRotate();
     }
 });
+
+    playerReset();
     update();
