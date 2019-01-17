@@ -11,7 +11,8 @@ const colors = [
 ];
 const player = {
     pos: {x: 0, y: 0},
-    matriz: null
+    matriz: null, 
+    score: 0
 };
 context.scale(20,20);
 
@@ -130,6 +131,8 @@ function gridSweep() {
         const row = grid.splice(y,1)[0].fill(0);
         grid.unshift(row);
         ++y;
+
+        player.score += rowCount *10;
     }
 
 }
@@ -154,6 +157,7 @@ function playerDrop() {
         merge(grid, player);
         playerReset();
         gridSweep();
+        updateScore();
     }
         dropCounter=0;
 }
@@ -197,6 +201,10 @@ function playerReset() {
     player.pos.y = 0;
 }
 
+function updateScore() {
+    document.getElementById("score").innerHTML = player.score;
+}
+
 document.addEventListener("keydown", event =>{
     if (event.keyCode===40) {
         playerDrop();
@@ -208,6 +216,6 @@ document.addEventListener("keydown", event =>{
         playerRotate();
     }
 });
-
+    updateScore();
     playerReset();
     update();
