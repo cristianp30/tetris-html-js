@@ -6,7 +6,7 @@ const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 const grid = createMatriz(10,20);
 const colors = [
-    null, 'red', 'yellow', 'pink', 'blue', 'grenn', 'orange', 'purple'
+    null, 'red', 'yellow', 'pink', 'blue', 'green', 'orange', 'purple'
 
 ];
 const player = {
@@ -117,6 +117,22 @@ function draw(){
     drawMatriz(player.matriz, player.pos);
 }
 
+function gridSweep() {
+    let rowCount = 1;
+    outer: for(let y = grid.length - 1; y>0; --y)   {
+        for(let x =0; x<grid[y].length; ++x ){
+            if(grid[y][x]===0)
+            {
+                continue outer;
+            
+            }
+        }
+        const row = grid.splice(y,1)[0].fill(0);
+        grid.unshift(row);
+        ++y;
+    }
+
+}
 function update (time = 0){
     const deltaTime = time - lastTime;
     
@@ -137,6 +153,7 @@ function playerDrop() {
         player.pos.y--;
         merge(grid, player);
         playerReset();
+        gridSweep();
     }
         dropCounter=0;
 }
