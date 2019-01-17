@@ -5,6 +5,10 @@ let dropCounter = 0;
 const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 const grid = createMatriz(10,20);
+const colors = [
+    null, 'red', 'yellow', 'pink', 'blue', 'grenn', 'orange', 'purple'
+
+];
 const player = {
     pos: {x: 0, y: 0},
     matriz: null
@@ -20,40 +24,40 @@ function createPiece(tipo) {
         ];
     }else if(tipo==='L'){
         return[
-            [0,1,0],
-            [0,1,0],
-            [0,1,1]
+            [0,2,0],
+            [0,2,0],
+            [0,2,2]
         ];
     } else if(tipo==='J'){
         return[
-            [0,1,0],
-            [0,1,0],
-            [1,1,0]
+            [0,3,0],
+            [0,3,0],
+            [3,3,0]
         ];
     }else if(tipo==='S'){
         return[
-            [0,1,1],
-            [1,1,0],
+            [0,4,4],
+            [4,4,0],
             [0,0,0]
         ];
     }else if(tipo==='Z'){
         return[
-            [1,1,0],
-            [0,1,1],
+            [5,5,0],
+            [0,5,5],
             [0,0,0]
         ];
     }else if(tipo==='O'){
         return[
-            [1,1],
-            [1,1]
+            [6,6],
+            [6,6]
             
         ];
     }else if(tipo==='I'){
         return[
-            [0,1,0],
-            [0,1,0],
-            [0,1,0],
-            [0,1,0]
+            [0,7,0,0],
+            [0,7,0,0],
+            [0,7,0,0],
+            [0,7,0,0]
         ];
     }
 }
@@ -97,7 +101,7 @@ function drawMatriz(matriz, offset) {
     matriz.forEach((row, y) => {
         row.forEach((value, x)=>{
             if(value!==0) {
-                context.fillStyle = "red";
+                context.fillStyle = colors[value];
                 context.fillRect(x + offset.x, y + offset.y, 1, 1);
             }
         });
@@ -172,7 +176,7 @@ function rotate(matriz) {
 function playerReset() {
     const pieces = 'IJLZSTO'
     player.matriz = createPiece(pieces[pieces.length * Math.random() | 0]);
-    player.pos.x = (grid[0].length/2 | 0) - (player.matriz[0].length/2 | 0);
+    player.pos.x = (grid[0].length/2 | 0) - (player.matriz[0].length/2 | 0) ;
     player.pos.y = 0;
 }
 
