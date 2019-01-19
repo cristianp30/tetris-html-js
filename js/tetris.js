@@ -119,6 +119,15 @@ function drawMatriz(matriz, offset) {
 function drawMatrizNext(matriz, offset){
     contextNext.fillStyle = "#000";
     contextNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
+    matriz.forEach((row, y) => {
+        row.forEach((value, x)=>{
+            if(value!==0) {
+                contextNext.fillStyle = colors[value];
+                contextNext.fillRect(x + offset.x, y + offset.y, 1, 1);
+            }
+        });
+        
+    });
 }
 
 function draw(){
@@ -211,9 +220,23 @@ function rotate(matriz) {
 function playerReset() {
     const pieces = 'IJLZSTO'
     dropInterval = 1000 - (player.level * 100);
-    player.matriz = createPiece(pieces[pieces.length * Math.random() | 0]);
+    if (player.next === null) {
+
+        player.matriz = createPiece(pieces[pieces.length * Math.random() | 0]);
+    }else {
+        player.matriz = player.next
+    }
+    player.next = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.x = (grid[0].length/2 | 0) - (player.matriz[0].length/2 | 0) ;
     player.pos.y = 0;
+    if (collide(grid , player)) {
+         
+        grid.forEach(row=> row.fill(0));
+        player.score = 0;
+        player,level = 0;
+        player.lines = 0;        
+        updateScore ();
+    }
 }
 
 function updateScore() {
