@@ -3,7 +3,9 @@ let dropInterval =1000;
 let dropCounter = 0;
 
 const canvas = document.getElementById("tetris");
+const canvasNext = document.getElementById("nextpiece");
 const context = canvas.getContext("2d");
+const contextNext = canvasNext.getContext("2d");
 const grid = createMatriz(10,20);
 const colors = [
     null, 'red', 'yellow', 'pink', 'blue', 'green', 'orange', 'purple'
@@ -12,11 +14,13 @@ const colors = [
 const player = {
     pos: {x: 0, y: 0},
     matriz: null, 
+    next: null,
     score: 0,
     level: 0,
     lines: 0
 };
 context.scale(20,20);
+contextNext.scale(19,19);
 
 function createPiece(tipo) {
     if(tipo==='T'){
@@ -112,12 +116,17 @@ function drawMatriz(matriz, offset) {
     });
     
 }
+function drawMatrizNext(matriz, offset){
+    contextNext.fillStyle = "#000";
+    contextNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
+}
 
 function draw(){
     context.fillStyle = "#000";
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawMatriz(grid, {x:0, y:0});
     drawMatriz(player.matriz, player.pos);
+    drawMatrizNext(player.next, {x:1, y:1});
 }
 
 function gridSweep() {
