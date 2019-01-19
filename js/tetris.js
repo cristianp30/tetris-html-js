@@ -12,7 +12,9 @@ const colors = [
 const player = {
     pos: {x: 0, y: 0},
     matriz: null, 
-    score: 0
+    score: 0,
+    level: 0,
+    lines: 0
 };
 context.scale(20,20);
 
@@ -133,6 +135,9 @@ function gridSweep() {
         ++y;
 
         player.score += rowCount *10;
+        player.lines ++;
+        rowCount *2;
+        if (player.lines %  3 === 0) player.level ++;
     }
 
 }
@@ -196,6 +201,7 @@ function rotate(matriz) {
 
 function playerReset() {
     const pieces = 'IJLZSTO'
+    dropInterval = 1000 - (player.level * 100);
     player.matriz = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.x = (grid[0].length/2 | 0) - (player.matriz[0].length/2 | 0) ;
     player.pos.y = 0;
@@ -203,6 +209,8 @@ function playerReset() {
 
 function updateScore() {
     document.getElementById("score").innerHTML = player.score;
+    document.getElementById("level").innerHTML = player.level;
+    document.getElementById("lines").innerHTML = player.lines;
 }
 
 document.addEventListener("keydown", event =>{
